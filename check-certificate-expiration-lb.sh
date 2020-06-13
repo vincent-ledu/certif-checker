@@ -23,11 +23,17 @@ function check_certs_lb () {
     PORT=443
   fi
 
+  OPTIONS=""
+  if [ $PORT = "5432" ]; then
+    # this is default port for postgre. using starttls postgres option
+    OPTIONS="$OPTIONS -starttls postgres"
+  fi
+
   now_epoch=$( date +%s )
 
   dig +noall +answer $DOMAIN | while read _ _ _ _ ip;
   do
-    expiry_date=$( echo | openssl s_client -showcerts -servername $DOMAIN \
+    expiry_date=$( echo | openssl s_client $OPTIONS -showcerts -servername $DOMAIN \
       -connect $ip:443 2>/dev/null | \
       openssl x509 -inform pem -noout -enddate | cut -d "=" -f 2 )
     expiry_epoch=$( date -d "$expiry_date" +%s )
