@@ -6,7 +6,8 @@
 ####                                                                       ####
 ###############################################################################
 
-function check_certs_simple () {
+### For server behind load balancer
+function check_certs_lb () {
   line='-------------------------------------'
 
   if [ -z "$1" ]; then
@@ -24,15 +25,19 @@ function check_certs_simple () {
 
   now_epoch=$( date +%s )
 
-  expiry_date=$( echo | openssl s_client -showcerts -servername $DOMAIN \
-    -connect $DOMAIN:$PORT 2>/dev/null | \
-    openssl x509 -inform pem -noout -enddate | cut -d "=" -f 2 )
-  expiry_epoch=$( date -d "$expiry_date" +%s )
-  expiry_days="$(( ($expiry_epoch - $now_epoch) / (3600 * 24) ))"
-  printf "%s %s %sdays left\n" $DOMAIN "${line:${#DOMAIN}} $expiry_days"
+  dig +noall +answer $DOMAIN | while read _ _ _ _ ip;
+  do
+    expiry_date=$( echo | openssl s_client -showcerts -servername $DOMAIN \
+      -connect $ip:443 2>/dev/null | \
+      openssl x509 -inform pem -noout -enddate | cut -d "=" -f 2 )
+    expiry_epoch=$( date -d "$expiry_date" +%s )
+    expiry_days="$(( ($expiry_epoch - $now_epoch) / (3600 * 24) ))"
+    printf "%s %s %s %sdays left\n" $DOMAIN $ip "${line:${#DOMAIN}} $expiry_days"
+  done
 }
+
 
 while read line
 do
-  check_certs_simple $line
+  check_certs_lb $line
 done < "${1:-/dev/stdin}"
