@@ -2,9 +2,9 @@
 
 Shell scripts for checking certificates expiration
 
-These scripts have been "stolen" to [Andrew](https://stackoverflow.com/users/538507/andrew) at https://stackoverflow.com/a/47878528/12325517 
+These scripts have been "stolen" to [Andrew](https://stackoverflow.com/users/538507/andrew) at [Stackoverflow](https://stackoverflow.com/a/47878528/12325517)
 
-The output format with dash padding has been "stolen" to [Fritz G. Mehner](https://stackoverflow.com/users/57457/fritz-g-mehner) at https://stackoverflow.com/a/4411098/12325517
+The output format with dash padding has been "stolen" to [Fritz G. Mehner](https://stackoverflow.com/users/57457/fritz-g-mehner) at [Stackoverflox](https://stackoverflow.com/a/4411098/12325517)
 
 ## Usage
 
