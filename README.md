@@ -34,3 +34,13 @@ google.com 216.58.213.142 ------------ 66 days left
 ```
 
 See `testfile.txt` and `runtest.sh` too for example.
+
+## Misc.
+
+It tries to handle other ssl endpoint, such as postgres database (my need at the moment).  
+First quick & dirty approach is to check port, and if it is default postgres port, add `-starttls postgres` option to the openssl command line.
+
+Other tls endpoint could be handle: smtp, ldap, etc...  
+It's quick & dirty approach, because it should be the user to specify wich type of endpoint it is, and if service is bind to an non default port, script must be edited.
+
+To improve... 
