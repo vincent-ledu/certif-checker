@@ -8,7 +8,7 @@
 
 ### For server behind load balancer
 function check_certs_lb () {
-  line='-------------------------------------'
+  line='------------------------------------'
 
   if [ -z "$1" ]; then
     echo "Usage: $0 domain [PORT:443]"
@@ -32,7 +32,8 @@ function check_certs_lb () {
       openssl x509 -inform pem -noout -enddate | cut -d "=" -f 2 )
     expiry_epoch=$( date -d "$expiry_date" +%s )
     expiry_days="$(( ($expiry_epoch - $now_epoch) / (3600 * 24) ))"
-    printf "%s %s %s %sdays left\n" $DOMAIN $ip "${line:${#DOMAIN}} $expiry_days"
+    nb_car=$(( ${#DOMAIN} + ${#ip} ))
+    printf "%s %s %s %sdays left\n" $DOMAIN $ip "${line:$nb_car} $expiry_days"
   done
 }
 
